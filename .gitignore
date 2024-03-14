@@ -1,3 +1,5 @@
-*.toml
+.streamlit
+*_checkpoints
 myenv
-data
+storage
+txt_files
