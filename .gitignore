@@ -3,3 +3,4 @@
 myenv
 storage
 txt_files
+*pycache__

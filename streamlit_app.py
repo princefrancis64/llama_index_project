@@ -4,6 +4,7 @@ import os
 from llama_index.core import (VectorStoreIndex,SimpleDirectoryReader,StorageContext,load_index_from_storage)
 
 
+
 #### Converting the audio/video file into a text format
 client = OpenAI()
 audio_file_path = "./audio_files/yolo_dutch.mp3"
@@ -18,12 +19,14 @@ file_storage_path = os.path.join("./data/data.txt")
 with open(file=file_storage_path,mode="w") as file:
     file.write(translation.text)
 
+
 ### checking if storage already exists
 PERSIST_DIR ="./storage"
 if not os.path.exists(PERSIST_DIR):
     ## load the documents and create the index
     documents = SimpleDirectoryReader("data").load_data()
-    index = VectorStoreIndex.from_documents(documents)
+    splitter = SentenceSplitter(chunk_size=512)
+    index = VectorStoreIndex.from_documents(documents,transformations=[splitter])
     ## store it for later
     index.storage_context.persist(persist_dir=PERSIST_DIR)
 else:
@@ -47,7 +50,7 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 ## Initialize the chat history
 if "messages" not in st.session_state:
-    st.session_state.messages=[]
+    st.session_state.messages=[] 
 
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
@@ -59,7 +62,7 @@ if prompt:=st.chat_input("Your question...."):
     ## Adding user message to chat history
     st.session_state.messages.append({"role":"user","content":prompt})
     # Display user message in chat message container
-    with st.chat_message("user"):
+    with st.chat_message("user",avatar="👦"):
         st.markdown(prompt)
 
     # Display assistant response in chat message container
