@@ -4,3 +4,4 @@ myenv
 storage
 txt_files
 *pycache__
+*.mp4
